@@ -1,5 +1,7 @@
 \documentclass{article}
 \usepackage{longtable}
+\usepackage{caption}
+\usepackage{hyperref}
 \usepackage{graphicx}
 \title{Heart Disease Data}
 \author{Saurav Gupta}
@@ -622,4 +624,36 @@ Age & Sex & ChestPain & BloodPressure & Cholesterol & BloodSugar & MaxHeartRate 
 57 & 0 & 1 & 130 & 236 & 0 & 174 & 0 \\
 \hline
 \end{longtable}
+\section{4(a): Plot of gender vs number of people having heart disease}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\textwidth]{plot-4a.png}
+\caption{gender vs number of people having heart disease.}
+\label{fig:image1}
+\end{figure}
+As shown in Figure \ref{fig:image1} shows the plot of gender vs number of people having heart disease
+\section{4(b): Correlation between Age (x-axis) vs Blood pressure (y-axis)}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\textwidth]{plot-4b.png}
+\caption{Age (x-axis) vs Blood pressure (y-axis)}
+\label{fig:image2}
+\end{figure}
+As shown in Figure \ref{fig:image2} shows the correlation between Age (x-axis) vs Blood pressure (y-axis)
+\section{4(c): Correlation between Age (x-axis) vs Cholesterol (y-axis)}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\textwidth]{plot-4c.png}
+\caption{Age (x-axis) vs Cholesterol (y-axis)}
+\label{fig:image3}
+\end{figure}
+As shown in Figure \ref{fig:image3} shows the correlation between Age (x-axis) vs Cholesterol (y-axis)
+\section{4(d): Percentage of age groups that have heart disease}
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.5\textwidth]{plot-4d.png}
+\caption{percentage of age groups that have heart disease}
+\label{fig:image4}
+\end{figure}
+As shown in Figure \ref{fig:image4} shows the percentage of age groups that have heart disease
 \end{document}

@@ -3,9 +3,18 @@
 CSV_FILE="$1"
  
 LATEX_FILE="${CSV_FILE%.csv}.tex"
+
+
+if [ -z "$1" ]; then
+  echo "Error: No CSV file provided."
+  echo "Usage: $0 <CSV_FILE>"
+  exit 1
+fi
  
 echo "\\documentclass{article}" > "$LATEX_FILE"
 echo "\\usepackage{longtable}" >> "$LATEX_FILE"
+echo "\\usepackage{caption}" >> $LATEX_FILE
+echo "\\usepackage{hyperref}" >> $LATEX_FILE
 echo "\\usepackage{graphicx}" >> "$LATEX_FILE"
 echo "\\title{Heart Disease Data}" >> "$LATEX_FILE"
 echo "\\author{Saurav Gupta}" >> "$LATEX_FILE"
@@ -44,6 +53,59 @@ tail -n +2 "$CSV_FILE" | while IFS=, read -r line; do
 done
  
 echo "\\end{longtable}" >> "$LATEX_FILE"
+
+
+# Section with an image
+echo "\\section{4(a): Plot of gender vs number of people having heart disease}" >> $LATEX_FILE
+echo "\\begin{figure}[h]" >> $LATEX_FILE
+echo "\\centering" >> $LATEX_FILE
+echo "\\includegraphics[width=0.5\\textwidth]{plot-4a.png}" >> $LATEX_FILE
+echo "\\caption{gender vs number of people having heart disease.}" >> $LATEX_FILE
+echo "\\label{fig:image1}" >> $LATEX_FILE
+echo "\\end{figure}" >> $LATEX_FILE
+
+# Referencing the image in the text
+echo "As shown in Figure \\ref{fig:image1} shows the plot of gender vs number of people having heart disease" >> $LATEX_FILE
+
+
+
+
+echo "\\section{4(b): Correlation between Age (x-axis) vs Blood pressure (y-axis)}" >> $LATEX_FILE
+echo "\\begin{figure}[h]" >> $LATEX_FILE
+echo "\\centering" >> $LATEX_FILE
+echo "\\includegraphics[width=0.5\\textwidth]{plot-4b.png}" >> $LATEX_FILE
+echo "\\caption{Age (x-axis) vs Blood pressure (y-axis)}" >> $LATEX_FILE
+echo "\\label{fig:image2}" >> $LATEX_FILE
+echo "\\end{figure}" >> $LATEX_FILE
+
+# Referencing the image in the text
+echo "As shown in Figure \\ref{fig:image2} shows the correlation between Age (x-axis) vs Blood pressure (y-axis)" >> $LATEX_FILE
+
+
+
+echo "\\section{4(c): Correlation between Age (x-axis) vs Cholesterol (y-axis)}" >> $LATEX_FILE
+echo "\\begin{figure}[h]" >> $LATEX_FILE
+echo "\\centering" >> $LATEX_FILE
+echo "\\includegraphics[width=0.5\\textwidth]{plot-4c.png}" >> $LATEX_FILE
+echo "\\caption{Age (x-axis) vs Cholesterol (y-axis)}" >> $LATEX_FILE
+echo "\\label{fig:image3}" >> $LATEX_FILE
+echo "\\end{figure}" >> $LATEX_FILE
+
+# Referencing the image in the text
+echo "As shown in Figure \\ref{fig:image3} shows the correlation between Age (x-axis) vs Cholesterol (y-axis)" >> $LATEX_FILE
+
+echo "\\section{4(d): Percentage of age groups that have heart disease}" >> $LATEX_FILE
+echo "\\begin{figure}[h]" >> $LATEX_FILE
+echo "\\centering" >> $LATEX_FILE
+echo "\\includegraphics[width=0.5\\textwidth]{plot-4d.png}" >> $LATEX_FILE
+echo "\\caption{percentage of age groups that have heart disease}" >> $LATEX_FILE
+echo "\\label{fig:image4}" >> $LATEX_FILE
+echo "\\end{figure}" >> $LATEX_FILE
+
+# Referencing the image in the text
+echo "As shown in Figure \\ref{fig:image4} shows the percentage of age groups that have heart disease" >> $LATEX_FILE
+
+
 echo "\\end{document}" >> "$LATEX_FILE"
  
 echo "LaTeX table generated successfully! You can compile $LATEX_FILE to create the PDF."

@@ -1,95 +1,63 @@
-#!/bin/bash
+age_40_50=0
+age_50_60=0
+age_60_70=0
+age_70_80=0
+age_80_90=0
+age_90_100=0
+total=0
 
+awk -F, 'NR>1 && $8 == 1 {
+    if ($1 >= 40 && $1 < 50) age_40_50+=1
+    else if ($1 >= 50 && $1 < 60) age_50_60+=1
+    else if ($1 >= 60 && $1 < 70) age_60_70+=1
+    else if ($1 >= 70 && $1 < 80) age_70_80+=1
+    else if ($1 >= 80 && $1 < 90) age_80_90+=1
+    else if ($1 >= 90 && $1 <= 100) age_90_100+=1
+}
+END {
+	total = age_40_50 + age_50_60 + age_60_70 + age_70_80 + age_80_90 + age_90_100
+    printf "age4050=%.10f\n", age_40_50/total
+    printf "age5060=%.10f\n", age_50_60/total
+    printf "age6070=%.10f\n", age_60_70/total
+    printf "age7080=%.10f\n", age_70_80/total
+    printf "age8090=%.10f\n", age_80_90/total
+    printf "age90100=%.10f\n", age_90_100/total
+}' heart.csv > temp.txt
 
-input_csv="heart.csv"
-output_csv="age_group_counts.csv"
-gnuplot_script="quest_4d.p"
+eval $(grep "age" temp.txt)
 
-
-awk -F, 'NR > 1 {
-    age=$1
-    heart_disease=$8
-    if (heart_disease == 1) {
-        if (age >= 40 && age < 50) age_group="40-50";
-        else if (age >= 50 && age < 60) age_group="50-60";
-        else if (age >= 60 && age < 70) age_group="60-70";
-        else if (age >= 70 && age < 80) age_group="70-80";
-        else if (age >= 80 && age < 90) age_group="80-90";
-        else if (age >= 90) age_group="90-100";
-        print age_group;
-    }
-}' $input_csv | sort | uniq -c | awk '{print $2 "," $1}' > $output_csv
-
-
-awk 'BEGIN {
-    total=0;
-    while ((getline line < "'"$output_csv"'") > 0) {
-        split(line, fields, ",");
-        total += fields[2];
-    }
-    close("'"$output_csv"'");
-
-    print "Age Group,Count,Percentage";
-    while ((getline line < "'"$output_csv"'") > 0) {
-        split(line, fields, ",");
-        percentage = fields[2] / total * 100;
-        print fields[1] "," fields[2] "," percentage;
-    }
-}' > temp.csv && mv temp.csv $output_csv
-
-
-cat << EOF > quest4_d.p
-set terminal png size 800,600
+cat <<EOF > 'quest4_d.p'
+set terminal png
 set output 'plot-4d.png'
-set title "Heart Disease by Age Group"
-set key out top box
-set style fill solid 1.0 border -1
+set title "Percentage of Age Groups with Heart Disease"
+
+angle1 = ${age4050} * 360
+angle2 = angle1 + ${age5060} * 360
+angle3 = angle2 + ${age6070} * 360
+angle4 = angle3 + ${age7080} * 360
+angle5 = angle4 + ${age8090} * 360
+angle6 = angle5 + ${age90100} * 360
+
 set angles degree
-set size square
-
-# Define starting angle
-start_angle = 0
-
-
-reg1 = 36     
-reg2 = reg1 + 61.2   
-reg3 = reg2 + 97.2   
-reg4 = reg3 + 108     
-reg5 = reg4 + 46.8   
-reg6 = reg5 + 10.8    
-
-
-colors = "red, blue, cyan, green, yellow, orange"
-
-
-set obj 1 circle arc [0:reg1] fc rgb "red"
-set obj 2 circle arc [reg1:reg2] fc rgb "blue"
-set obj 3 circle arc [reg2:reg3] fc rgb "cyan"
-set obj 4 circle arc [reg3:reg4] fc rgb "green"
-set obj 5 circle arc [reg4:reg5] fc rgb "yellow"
-set obj 6 circle arc [reg5:reg6] fc rgb "orange"
-
-set obj 1 circle at 0,0 size 1 front
-set obj 2 circle at 0,0 size 1 front
-set obj 3 circle at 0,0 size 1 front
-set obj 4 circle at 0,0 size 1 front
-set obj 5 circle at 0,0 size 1 front
-set obj 6 circle at 0,0 size 1 front
-
 set xrange [-1:1]
 set yrange [-1:1]
+set size square
+set style fill solid
+set key out top box
 
+set obj 1 circle arc [0:angle1] at 0, 0 size 1 front fc rgb "#ff595e"
+set obj 2 circle arc [angle1:angle2] at 0, 0 size 1 front fc rgb "#ffca3a"
+set obj 3 circle arc [angle2:angle3] at 0, 0 size 1 front fc rgb "#8ac926"
+set obj 4 circle arc [angle3:angle4] at 0, 0 size 1 front fc rgb "#1982c4"
+set obj 5 circle arc [angle4:angle5] at 0, 0 size 1 front fc rgb "#6a4c93"
+set obj 6 circle arc [angle5:angle6] at 0, 0 size 1 front fc rgb "#f2b5d4"
 
-plot NaN title "40 - 50" with lines lc "red", \
-     NaN title "50 - 60" with lines lc "blue", \
-     NaN title "60 - 70" with lines lc "cyan", \
-     NaN title "70 - 80" with lines lc "green", \
-     NaN title "80 - 90" with lines lc "yellow", \
-     NaN title "90 - 100" with lines lc "orange"
-
+plot NaN title '40-50' with lines lc rgb "#ff595e", \
+     NaN title '50-60' with lines lc rgb "#ffca3a", \
+     NaN title '60-70' with lines lc rgb "#8ac926", \
+     NaN title '70-80' with lines lc rgb "#1982c4", \
+     NaN title '80-90' with lines lc rgb "#6a4c93", \
+     NaN title '90-100' with lines lc rgb "#f2b5d4"
 EOF
 
-gnuplot quest4_d.p
-
-echo "Pie chart generated as plot-4d.png"
-
+gnuplot 'quest4_d.p'
